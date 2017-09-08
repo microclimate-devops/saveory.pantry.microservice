@@ -60,14 +60,17 @@ public class PantryDatabase {
 		
 	//Access the database to return the user's pantry in JSON
 	public static Pantry getPantryObject(String user){
+		Pantry userPantry = null;
+
 		//Get the pantries collection and search for pantry
 		JacksonDBCollection<Pantry, String> coll = PantryDatabase.getJacksonCollection();
 		//DBCursor<Pantry> cursor = coll.find().is("user", user);
-		Pantry userPantry = coll.findOne(DBQuery.is("user", user));
+		userPantry = coll.findOne(DBQuery.is("user", user));
 		//assign first search result to Pantry object
 		/*if(cursor.hasNext()){
 			userPantry = cursor.next();
 		}*/
+
 
 		return userPantry;
 	}
@@ -88,6 +91,8 @@ public class PantryDatabase {
 			foundPantry = writer.writeValueAsString(userPantry);
 		} catch (JsonProcessingException e){
 			throw new PantryException("Could not process database results while trying to find pantry");
+		} catch (IOException e){
+			throw new PantryException("Unkown exception. Error message: "+e.getMessage());
 		}
 
 		return foundPantry;
@@ -109,42 +114,47 @@ public class PantryDatabase {
 	//Create a user's pantry with their first Ingredient
 	public static void createPantry(String user, Ingredient ingred) throws PantryException{
 		Pantry userPantry = new Pantry(user, ingred);
+		PantryDatabase.addPantry(userPantry);
+	}
 
+	//Add pantry to database
+	public static void addPantry(Pantry userPantry) throws PantryException{
 		//Get pantry collection and insert new pantry
 		JacksonDBCollection<Pantry, String> coll = PantryDatabase.getJacksonCollection();
 		WriteResult<Pantry, String> result = coll.insert(userPantry);	
 
 		//Check that the pantry was added to the database
-		try{
-			if(!getPantryObject(user).getPantry().get(0).equals(ingred)){
-				throw new PantryException("The user's pantry in the database does not match the one just created");
-			}
-		} catch(Exception e){
-			throw new PantryException("Could not retrieve the user's new pantry from the database. Error message: "+e.getMessage());
+		if(!userPantry.equals(PantryDatabase.getPantryObject(userPantry.getUser()))){
+			throw new PantryException("The user's pantry in the database does not match the one just created");
 		}
-	}
-
-	//Update the user's pantry with a new version
-	public static void updatePantry(Pantry newPantry){
-		//Get pantry collection and update the correct entry
-		JacksonDBCollection<Pantry, String> coll = PantryDatabase.getJacksonCollection();
-		DBUpdate.Builder builder = new DBUpdate.Builder();
-
-		//Updated result
-		//Pantry updatedPantry = coll.findAndModify(DBQuery)
 
 	}
 
-	public static void removePantry(String user){
+	//Deletes the old version and replaces it with new
+	public static void replacePantry(Pantry newPantry) throws PantryException{
+		PantryDatabase.removePantry(newPantry.getUser());
+		PantryDatabase.addPantry(newPantry);
+	}
+
+	public static void removePantry(String user) throws PantryException{
 		//Get pantries collection
 		MongoCollection<Document> collection = PantryDatabase.getMongoCollection();
 
 		//Delete the pantry matching the user
 		collection.deleteOne(eq("user", user));
+
+		//Make sure the pantry is no longer there
+		try{
+			if(PantryDatabase.getPantryObject(user) != null){
+				throw new PantryException("Attempted to delete the pantry but it was found to still be in the database");
+			}
+		} catch(Exception e){
+			throw new PantryException("Could not retrieve the user's pantry from the database. Error message: "+e.getMessage());
+		}
 	}  	
 
 	//Add an ingredient to a user's panty
-	public static void addIngredient(String user, Ingredient ingred) throws PantryException {	
+	public static void addIngredient(String user, Ingredient ingred) throws PantryException {
 		//Get the user's pantry
 		Pantry userPantry = PantryDatabase.getPantryObject(user);
 
@@ -152,85 +162,60 @@ public class PantryDatabase {
 		if(userPantry == null){
 			PantryDatabase.createPantry(user, ingred);
 		}else{
+			//Make sure the ingredient is not already in the pantry
+			if(userPantry.hasIngredient(ingred)){
+				throw new PantryException("The ingredient is already in the user's pantry");
+			}
 			//Add the ingredient to the user's pantry
-			//userPantry.addIngredient(ingred)
-			//PantryDatabase.updatePantry(userPantry);
+			userPantry.addIngredient(ingred);
+			PantryDatabase.replacePantry(userPantry);
 		}
-		/*Document matchedDoc = new Document();
 
-		//Flag for whether the ingredient is a duplicate
-		boolean duplicate = false;
-
-		//Get the pantries collection
-		MongoCollection<Document> collection = PantryDatabase.getMongoCollection();
-
-		//Find documents that match the user and prepare to iterate through them
-		MongoCursor<Document> iterator = collection.find(eq("user", user)).iterator();
-
-		//Convert the ingredient into json
-		JsonReader reader = Json.createReader(new StringReader(jsonIngredient));
-		JsonObject ingredientJson = reader.readObject();
-		reader.close();
-
-		//Save the name of the ingredient that should be added
-		String ingredientName = ingredientJson.getString("item");
-
-		//Converting the ingredient string to a DBObject
-		DBObject ingredient = (DBObject)JSON.parse(jsonIngredient);
-
-		while(iterator.hasNext()){
-			Document doc = iterator.next();
-
-			//Save the id
-			ObjectId id = doc.getObjectId("_id");
-
-			//Convert the document into json
-			JsonReader reader2 = Json.createReader(new StringReader(doc.toJson()));
-			JsonObject jsonOutput = reader2.readObject();
-			reader2.close();
-
-			//Getting the array of the ingredients
-			JsonArray pantryJsonArray = jsonOutput.getJsonArray("pantry");
-			BasicDBList newPantryList = new BasicDBList();
-
-			for(int i = 0; i <  pantryJsonArray.size(); i++){
-				//Create a new object
-				DBObject newPantry = new BasicDBObject();
-	
-				//Save the ingredient information
-				String item = pantryJsonArray.getJsonObject(i).getString("item");
-				int qty = pantryJsonArray.getJsonObject(i).getInt("qty");
-				String qtyUnit = pantryJsonArray.getJsonObject(i).getString("qtyUnit");
-				String expDate = pantryJsonArray.getJsonObject(i).getString("expDate");
-
-				if(item.equals(ingredientName))
-					duplicate = true;
-
-				//Insert the saved information into the new object
-				newPantry.put("item", item);
-				newPantry.put("qty", qty);
-				newPantry.put("qtyUnit", qtyUnit);
-				newPantry.put("expDate", expDate);
-
-				//Add the ingredient object to the new ingerdient list
-				newPantryList.add(newPantry);
-			}
-
-			//Add the new ingredient to the list
-			newPantryList.add(ingredient);
-		
-			//Create a new document with the saved information and new pantry
-			Document updatedPantry = new Document();
-			updatedPantry.put("_id", id);
-			updatedPantry.put("user", user);
-			updatedPantry.put("pantry", newPantryList);
-			
-			if(!duplicate){
-				//Update the collection if the ingredient is not a duplicate
-				collection.findOneAndReplace(eq("user", user), updatedPantry);
-			}
-		}*/
 	}
+
+	public static void updateIngredient(String user, Ingredient updatedIngred) throws PantryException{
+		//Get the user's pantry
+		Pantry userPantry = PantryDatabase.getPantryObject(user);
+		if(userPantry == null){
+			throw new PantryException("The user's pantry could not be found in the database");
+		}
+
+		//remove the old ingredient
+		userPantry.deleteIngredient(updatedIngred.getItem());
+
+		//add the new ingredient
+		userPantry.addIngredient(updatedIngred);
+
+		//update pantry
+		replacePantry(userPantry);
+
+		//make sure ingredient was updated
+		if(!updatedIngred.equals(PantryDatabase.getPantryObject(user).getIngredient(updatedIngred.objectIdentifier()))){
+			throw new PantryException("The ingredient update did not take to the database");
+		}	
+
+
+	}
+
+	public static void removeIngredient(String user, String ingredID) throws PantryException{
+		//Get the user's pantry
+		Pantry userPantry = PantryDatabase.getPantryObject(user);
+		if(userPantry == null){
+			throw new PantryException("The user's pantry could not be found in the database");
+		}
+
+		//Remove the ingredient
+		userPantry.deleteIngredient(ingredID);
+
+		//Update pantry
+		replacePantry(userPantry);	
+
+		//Make sure the ingredient was deleted
+		if(PantryDatabase.getPantryObject(user).hasIngredient(ingredID)){
+			throw new PantryException("After attempt to delete the ingredient, it was found in the database");
+		}
+	}
+
 
 //	//Combine two jsonArrays into one
 //	private static JsonArray concatArray(JsonArray... arrs)

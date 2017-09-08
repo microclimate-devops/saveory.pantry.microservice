@@ -1,5 +1,10 @@
 package application.rest.v1.JsonClasses;
 
+/**************************/
+//External Libs
+import com.fasterxml.jackson.annotation.JsonIgnore;
+/**************************/
+
 public class Ingredient{
 	private String item;
 	private int qty;
@@ -14,6 +19,10 @@ public class Ingredient{
 		this.qtyUnit = "";
 		this.expDate = "";
 		this.contains = "false";
+	}
+
+	public String objectIdentifier(){
+		return this.getItem();
 	}
 
 	public String getItem(){
@@ -69,16 +78,21 @@ public class Ingredient{
 		    return true;
 		}
 	 
-		/* Check if o is an instance of Complex or not
+		/* Check if o is an instance of Ingredient or not
+		   If it's a string will directly compare indentifier with that string
 		  "null instanceof [type]" also returns false */
-		if (!(o instanceof Ingredient)) {
-		    return false;
+		if (o instanceof Ingredient) {
+			// typecast o to Ingredient so that we can compare data members 
+			Ingredient i = (Ingredient) o;
+			//Compare the identifiers
+			return (this.getItem().toLowerCase().equals(i.getItem().toLowerCase()) && this.getQty() == i.getQty() && this.getQtyUnit().equals(i.getQtyUnit()) && this.getExpDate().equals(i.getExpDate()));
+		}else if(o instanceof String) {
+			String i = (String) o;
+			return this.getItem().toLowerCase().equals(i.toLowerCase());
+		}else {
+			return false;
 		}
 		 
-		// typecast o to Ingredient so that we can compare data members 
-		Ingredient i = (Ingredient) o;
-		
-		//Compare the identifiers
-		return this.item == i.item;
 	}
+
 }

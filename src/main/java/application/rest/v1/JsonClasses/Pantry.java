@@ -35,6 +35,80 @@ public class Pantry{
 		this.pantry = pantry;
 	}
 
+	//return the ingredient with the given id
+	public Ingredient getIngredient(String ingredID) throws PantryException {
+		int ingIndex = this.locateIngredient(ingredID);
+		if(ingIndex == -1){
+			throw new PantryException("The ingredient could not be found in the pantry");
+		}
+
+		return this.getPantry().get(ingIndex);
+	}
+
+	//Tell if the ingredient is already in the pantry
+	public boolean hasIngredient(Ingredient ingred){
+		ArrayList<Ingredient> pantry = new ArrayList<Ingredient>(this.getPantry());
+
+		//Loop through and return if found
+		for(Ingredient i : pantry){
+			if(ingred.equals(i)){
+				return true;
+			}
+		}
+
+		//Not found
+		return false;
+	}
+
+	//Tell if the ingredient ID is already in the pantry
+	public boolean hasIngredient(String ingredID){
+		ArrayList<Ingredient> pantry = new ArrayList<Ingredient>(this.getPantry());
+
+		//Loop through and return if found
+		for(Ingredient i : pantry){
+			if(i.equals(ingredID)){
+				return true;
+			}
+		}
+
+		//Not found
+		return false;
+	}
+
+	public int locateIngredient(String ingredID){
+		ArrayList<Ingredient> pantry = new ArrayList<Ingredient>(this.getPantry());
+		int location = -1;
+		//loop through pantry and attempt to find the ingredient
+		for(int i = 0; i < pantry.size() && location == -1; i++){
+			if(pantry.get(i).equals(ingredID)){
+				location = i;
+			}
+		}
+
+		return location;
+	}
+
+	//Push an ingredient to the back of the pantry	
+	public void addIngredient(Ingredient newIngred){
+		ArrayList<Ingredient> pantry = new ArrayList<Ingredient>(this.getPantry());
+		pantry.add(newIngred);
+		this.setPantry(pantry);
+	}
+
+
+	//attempt to remove an ingredient from the pantry
+	public void deleteIngredient(String ingredID) throws PantryException{
+		int ingIndex = this.locateIngredient(ingredID);
+		if(ingIndex == -1){
+			throw new PantryException("The ingredient is not in the user's pantry");
+		}
+
+		//Remove the ingredient
+		ArrayList<Ingredient> pantry = new ArrayList<Ingredient>(this.getPantry());
+		pantry.remove(ingIndex);
+		this.setPantry(pantry);
+	}
+
 	@JsonProperty("_id")
 	public void setId(String id){
 		this.id = id;
@@ -67,5 +141,21 @@ public class Pantry{
 		return this.pantry;
 		//return this.pantry.toString();
 	}		
+
+	@Override
+	public boolean equals(Object o){
+		// If the object is compared with itself then return true  
+		if (o == this) {
+		    	return true;
+		}
+
+		//Not even the same class
+		if(!(o instanceof Pantry)){
+			return false;
+		}		
+
+		Pantry p = (Pantry) o;
+		return this.getUser().equals(p.getUser());
+	}
 }
 

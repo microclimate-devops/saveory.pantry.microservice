@@ -183,7 +183,7 @@ public class PantryDatabase {
 		}
 
 		//remove the old ingredient
-		userPantry.deleteIngredient(updatedIngred.getItem());
+		userPantry.deleteIngredient(updatedIngred.objectIdentifier());
 
 		//add the new ingredient
 		userPantry.addIngredient(updatedIngred);

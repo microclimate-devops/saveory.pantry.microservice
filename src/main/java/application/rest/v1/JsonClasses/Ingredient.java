@@ -2,6 +2,7 @@ package application.rest.v1.JsonClasses;
 
 /**************************/
 //External Libs
+import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 /**************************/
 
@@ -31,12 +32,22 @@ public class Ingredient{
 	//Give a list of ingredient fields in the order they should appear
 	public static String exposeFields(){
 		ArrayList<String> fields = new ArrayList<String>();
-		fields.add("ingredient");
-		fields.add("quantity");
-		fields.add("unit");
-		fields.add("expiration");
-		fields.add("refrigerated");
+		fields.add("\"ingredient\"");
+		fields.add("\"quantity\"");
+		fields.add("\"unit\"");
+		fields.add("\"expiration\"");
+		fields.add("\"refrigerated\"");
 		return fields.toString();
+	}
+
+	public static String exposeFieldTypes(){
+		ArrayList<String> fieldTypes = new ArrayList<String>();
+		fieldTypes.add("\"text\"");
+		fieldTypes.add("\"number\"");
+		fieldTypes.add("\"text\"");
+		fieldTypes.add("\"date\"");
+		fieldTypes.add("\"boolean\"");
+		return fieldTypes.toString();
 	}
 
 	public String objectIdentifier(){

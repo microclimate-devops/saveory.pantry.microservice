@@ -6,39 +6,49 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**************************/
 
 public class Ingredient{
-	private String item;
+	private String ingredient;
 	private int quantity;
 	private String unit;
 	private String expiration;
 	private boolean refrigerated;
 
 	public Ingredient(){
-		this.item = "";
+		this.ingredient = "";
 		this.quantity = 0;
 		this.unit = "";
 		this.expiration = "";
 		this.refrigerated = false;
 	}
 
-	public Ingredient(String item, int quantity, String unit, String expiration, boolean refrigerated){
-		this.item = item;
+	public Ingredient(String ingredient, int quantity, String unit, String expiration, boolean refrigerated){
+		this.ingredient = ingredient;
 		this.quantity = quantity;
 		this.unit = unit;
 		this.expiration = expiration;
 		this.refrigerated = refrigerated;
 	}
 
+	//Give a list of ingredient fields in the order they should appear
+	public static String exposeFields(){
+		ArrayList<String> fields = new ArrayList<String>();
+		fields.add("ingredient");
+		fields.add("quantity");
+		fields.add("unit");
+		fields.add("expiration");
+		fields.add("refrigerated");
+		return fields.toString();
+	}
 
 	public String objectIdentifier(){
-		return this.getItem();
+		return this.getIngredient();
 	}
 
-	public String getItem(){
-		return this.item;
+	public String getIngredient(){
+		return this.ingredient;
 	}
 
-	public void setItem(String item){
-		this.item = item;
+	public void setIngredient(String ingredient){
+		this.ingredient = ingredient;
 	}
 
 	public int getQuantity(){
@@ -76,7 +86,7 @@ public class Ingredient{
 /*
 	@Override
 	public String toString(){
-		return "{\"item\":\""+this.getItem()+"\", \"quantity\":"+this.getQuantity()+", \"unit\":\""+this.getUnit()+"\", \"expiration\":\""+this.getExpiration()+"\"}";
+		return "{\"ingredient\":\""+this.getIngredient()+"\", \"quantity\":"+this.getQuantity()+", \"unit\":\""+this.getUnit()+"\", \"expiration\":\""+this.getExpiration()+"\"}";
 	}*/
 
 	@Override
@@ -93,10 +103,10 @@ public class Ingredient{
 			// typecast o to Ingredient so that we can compare data members 
 			Ingredient i = (Ingredient) o;
 			//Compare the identifiers
-			return (this.getItem().toLowerCase().equals(i.getItem().toLowerCase()) && this.getQuantity() == i.getQuantity() && this.getUnit().equals(i.getUnit()) && this.getExpiration().equals(i.getExpiration()));
+			return (this.getIngredient().toLowerCase().equals(i.getIngredient().toLowerCase()) && this.getQuantity() == i.getQuantity() && this.getUnit().equals(i.getUnit()) && this.getExpiration().equals(i.getExpiration()));
 		}else if(o instanceof String) {
 			String i = (String) o;
-			return this.getItem().toLowerCase().equals(i.toLowerCase());
+			return this.getIngredient().toLowerCase().equals(i.toLowerCase());
 		}else {
 			return false;
 		}

@@ -55,8 +55,8 @@ public class PantryAPI {
 	@GET
 	@Path("/spec/ingredient")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Ingredient getIngredientSpec(){
-		return new Ingredient();	
+	public Response getIngredientSpec(){
+		return Ingredient.exposeFields();	
 	} 
 
 	//Get the pantry of the user

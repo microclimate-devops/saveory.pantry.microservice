@@ -74,25 +74,27 @@ public class PantryDatabase {
 
 		return userPantry;
 	}
-	
+
 	public static String getPantry(String user) throws PantryException{
 		String foundPantry = "";
 		ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
 		//Attempt to serialize the result
 		try{
-			Pantry userPantry = PantryDatabase.getPantryObject(user);
+			Pantry userPantry = PantryDatabase.getPantryObject(user);	
 
-			//Update to an empty object if null
-			if(userPantry == null){
-				userPantry = new Pantry();
+			if(userPantry != null){
+				foundPantry = writer.writeValueAsString(userPantry);
 			}
-			
-			foundPantry = writer.writeValueAsString(userPantry);
 		} catch (JsonProcessingException e){
 			throw new PantryException("Could not process database results while trying to find pantry");
 		} catch (IOException e){
 			throw new PantryException("Unkown exception. Error message: "+e.getMessage());
+		} finally {
+			//If the pantry string is empty, throw exception to indicate the pantry could not be found
+			if(foundPantry == ""){
+				throw new PantryException("The user's pantry could not be found in the database");	
+			}
 		}
 
 		return foundPantry;

@@ -56,8 +56,20 @@ public class PantryAPI {
 	@GET
 	@Path("/{access_token}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Pantry getPantry( @PathParam("access_token") final String accessToken ){
-		return PantryDatabase.getPantryObject(accessToken);
+	public Response getPantry( @PathParam("access_token") final String accessToken ){
+		//try to respond with the user's pantry
+		String resp = "";
+		Respond errorResp = new Respond();
+		//Attempt to get user's pantry
+		try{
+			resp =  PantryDatabase.getPantry(accessToken);
+		}catch (PantryException e){
+			errorResp.setToFailure(e.getMessage());
+			resp = errorResp.toString();
+		} 
+
+		return Response.ok(resp).build();
+		
 	}
 	
 	//Delete a user's pantry

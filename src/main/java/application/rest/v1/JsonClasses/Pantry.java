@@ -129,12 +129,6 @@ public class Pantry{
 
 	public void setPantry(List<Ingredient> pantry) /*throws PantryException*/{	
 		this.pantry = pantry;
-		/*try{
-			ObjectMapper mapper = new ObjectMapper();
-			this.pantry = mapper.readValue(pantry, new TypeReference<List<Ingredient>>(){}); 
-		} catch (IOException e){
-			throw new PantryException("Could not set pantry to "+pantry+". Failed with error: "+e.getMessage());
-		}*/
 	}
 
 	public List<Ingredient> getPantry(){

@@ -7,19 +7,27 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Ingredient{
 	private String item;
-	private int qty;
-	private String qtyUnit;
-	private String expDate;
-	private String contains;
-	/*private String hasEnough;*/
+	private int quantity;
+	private String unit;
+	private String expiration;
+	private boolean refrigerated;
 
 	public Ingredient(){
 		this.item = "";
-		this.qty = 0;
-		this.qtyUnit = "";
-		this.expDate = "";
-		this.contains = "false";
+		this.quantity = 0;
+		this.unit = "";
+		this.expiration = "";
+		this.refrigerated = false;
 	}
+
+	public Ingredient(String item, int quantity, String unit, String expiration, boolean refrigerated){
+		this.item = item;
+		this.quantity = quantity;
+		this.unit = unit;
+		this.expiration = expiration;
+		this.refrigerated = refrigerated;
+	}
+
 
 	public String objectIdentifier(){
 		return this.getItem();
@@ -33,44 +41,44 @@ public class Ingredient{
 		this.item = item;
 	}
 
-	public int getQty(){
-		return this.qty;
+	public int getQuantity(){
+		return this.quantity;
 	}
 
-	public void setQty(int qty){
-		this.qty = qty;
+	public void setQuantity(int quantity){
+		this.quantity = quantity;
 	}
 
-	public String getQtyUnit(){
-		return this.qtyUnit;
+	public String getUnit(){
+		return this.unit;
 	}
 
-	public void setQtyUnit(String qtyUnit){
-		this.qtyUnit = qtyUnit;
+	public void setUnit(String unit){
+		this.unit = unit;
 	}
 
-	public String getExpDate(){
-		return this.expDate;
+	public String getExpiration(){
+		return this.expiration;
 	}
 
-	public void setExpDate(String expDate){
-		this.expDate = expDate;
+	public void setExpiration(String expiration){
+		this.expiration = expiration;
 	}
 
-	public String getContains(){
-		return this.contains;
+	public boolean getRefrigerated(){
+		return this.refrigerated;
 	}
 
-	public void setContains(String contains){
-		this.contains = contains;
+	public void setRefrigerated(boolean refrigerated){
+		this.refrigerated = refrigerated;
 	}
 
 /*
 	@Override
 	public String toString(){
-		return "{\"item\":\""+this.getItem()+"\", \"qty\":"+this.getQty()+", \"qtyUnit\":\""+this.getQtyUnit()+"\", \"expDate\":\""+this.getExpDate()+"\"}";
+		return "{\"item\":\""+this.getItem()+"\", \"quantity\":"+this.getQuantity()+", \"unit\":\""+this.getUnit()+"\", \"expiration\":\""+this.getExpiration()+"\"}";
 	}*/
-	
+
 	@Override
 	public boolean equals(Object o){
 		// If the object is compared with itself then return true  
@@ -85,7 +93,7 @@ public class Ingredient{
 			// typecast o to Ingredient so that we can compare data members 
 			Ingredient i = (Ingredient) o;
 			//Compare the identifiers
-			return (this.getItem().toLowerCase().equals(i.getItem().toLowerCase()) && this.getQty() == i.getQty() && this.getQtyUnit().equals(i.getQtyUnit()) && this.getExpDate().equals(i.getExpDate()));
+			return (this.getItem().toLowerCase().equals(i.getItem().toLowerCase()) && this.getQuantity() == i.getQuantity() && this.getUnit().equals(i.getUnit()) && this.getExpiration().equals(i.getExpiration()));
 		}else if(o instanceof String) {
 			String i = (String) o;
 			return this.getItem().toLowerCase().equals(i.toLowerCase());

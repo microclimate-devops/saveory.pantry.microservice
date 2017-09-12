@@ -9,5 +9,6 @@
 /caches
 /local.properties
 .*.swp
+.*.swo
 .DS_Store
 /src/main/liberty/config/server.env

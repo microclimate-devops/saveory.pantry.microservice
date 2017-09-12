@@ -3,7 +3,6 @@ package application.rest.v1.API;
 /**************************/
 //JSON classes
 import application.rest.v1.JsonClasses.Ingredient;
-import application.rest.v1.JsonClasses.Ingredients;
 import application.rest.v1.JsonClasses.Pantry;
 /**************************/
 
@@ -52,6 +51,14 @@ import org.apache.http.util.EntityUtils;
 @Path("pantry")
 public class PantryAPI {
 
+	//Get information on what an ingredient looks like
+	@GET
+	@Path("/spec/ingredient")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Ingredient getIngredientSpec(){
+		return new Ingredient();	
+	} 
+
 	//Get the pantry of the user
 	@GET
 	@Path("/{access_token}")
@@ -65,6 +72,7 @@ public class PantryAPI {
 			resp =  PantryDatabase.getPantry(accessToken);
 		}catch (PantryException e){
 			errorResp.setToFailure(e.getMessage());
+			errorResp.setCode(204); //Indicate no pantry content
 			resp = errorResp.toString();
 		} 
 

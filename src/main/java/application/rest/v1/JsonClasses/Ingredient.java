@@ -58,6 +58,17 @@ public class Ingredient{
 		return locations.toString();
 	}
 
+	//return a list of booleans indicating which fields, according to exposeFields array, are editable
+	public static String exposeEditableFields(){
+		ArrayList<String> editable = new ArrayList<String>();
+		editable.add("false");
+		editable.add("true");
+		editable.add("true");
+		editable.add("true");
+		editable.add("true");
+		return editable.toString();
+	}
+
 	public String objectIdentifier(){
 		return this.getIngredient();
 	}

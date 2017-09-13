@@ -66,6 +66,14 @@ public class PantryAPI {
 		return Response.ok(Ingredient.exposeFieldTypes()).build();	
 	} 
 
+	//Get the edit options for fields in an ingredient
+	@GET
+	@Path("/spec/ingredient/edits")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getIngredientEditableSpec(){
+		return Response.ok(Ingredient.exposeEditableFields()).build();	
+	} 
+
 	//Get the available options for location field
 	@GET
 	@Path("/spec/ingredient/location")

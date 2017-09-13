@@ -66,6 +66,14 @@ public class PantryAPI {
 		return Response.ok(Ingredient.exposeFieldTypes()).build();	
 	} 
 
+	//Get the available options for location field
+	@GET
+	@Path("/spec/ingredient/location")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getIngredientFieldSpec(){
+		return Response.ok(Ingredient.exposeLocationOptions()).build();	
+	} 
+
 	//Get the pantry of the user
 	@GET
 	@Path("/{access_token}")

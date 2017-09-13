@@ -11,22 +11,22 @@ public class Ingredient{
 	private int quantity;
 	private String unit;
 	private String expiration;
-	private boolean refrigerated;
+	private String location;
 
 	public Ingredient(){
 		this.ingredient = "";
 		this.quantity = 0;
 		this.unit = "";
 		this.expiration = "";
-		this.refrigerated = false;
+		this.location = "";
 	}
 
-	public Ingredient(String ingredient, int quantity, String unit, String expiration, boolean refrigerated){
+	public Ingredient(String ingredient, int quantity, String unit, String expiration, String location){
 		this.ingredient = ingredient;
 		this.quantity = quantity;
 		this.unit = unit;
 		this.expiration = expiration;
-		this.refrigerated = refrigerated;
+		this.location = location;
 	}
 
 	//Give a list of ingredient fields in the order they should appear
@@ -36,7 +36,7 @@ public class Ingredient{
 		fields.add("\"quantity\"");
 		fields.add("\"unit\"");
 		fields.add("\"expiration\"");
-		fields.add("\"refrigerated\"");
+		fields.add("\"location\"");
 		return fields.toString();
 	}
 
@@ -46,8 +46,16 @@ public class Ingredient{
 		fieldTypes.add("\"number\"");
 		fieldTypes.add("\"text\"");
 		fieldTypes.add("\"date\"");
-		fieldTypes.add("\"boolean\"");
+		fieldTypes.add("{\"dropdown\": \"text\"}");
 		return fieldTypes.toString();
+	}
+
+	//Send a list of valid location options
+	public static String exposeLocationOptions(){
+		ArrayList<String> locations = new ArrayList<String>();
+		locations.add("\"Pantry\"");
+		locations.add("\"Refrigerator\"");
+		return locations.toString();
 	}
 
 	public String objectIdentifier(){
@@ -86,12 +94,12 @@ public class Ingredient{
 		this.expiration = expiration;
 	}
 
-	public boolean getRefrigerated(){
-		return this.refrigerated;
+	public String getLocation(){
+		return this.location;
 	}
 
-	public void setRefrigerated(boolean refrigerated){
-		this.refrigerated = refrigerated;
+	public void setLocation(String location){
+		this.location = location;
 	}
 
 /*

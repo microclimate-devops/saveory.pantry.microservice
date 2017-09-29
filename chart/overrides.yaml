@@ -1,0 +1,7 @@
+istio:
+  enabled: "true"
+  weight: 100
+base:
+  enabled: "true"
+  image:
+    tag: "488f0ed"

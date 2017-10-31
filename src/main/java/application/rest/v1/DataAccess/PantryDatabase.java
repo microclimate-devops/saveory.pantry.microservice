@@ -106,7 +106,7 @@ public class PantryDatabase {
 		ArrayList<String> ingredients = new ArrayList<String>();
 		try {
 			for(Ingredient ingred : getPantryObject(user).getPantry()) {
-				ingredients.add(ingred.getIngredient());
+				ingredients.add("\""+ingred.getIngredient()+"\"");
 			}
 		} catch (Exception e) {
 			throw new PantryException("Could not get the user's list of ingredients");

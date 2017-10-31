@@ -101,6 +101,19 @@ public class PantryDatabase {
 		
 	}
 	
+	//Create a list of ingredient names in the user's pantry
+	public static String getPantryIngredientNames(String user) throws PantryException{
+		ArrayList<String> ingredients = new ArrayList<String>();
+		try {
+			for(Ingredient ingred : getPantryObject(user).getPantry()) {
+				ingredients.add(ingred.getIngredient());
+			}
+		} catch (Exception e) {
+			throw new PantryException("Could not get the user's list of ingredients");
+		}
+		return ingredients.toString();
+	}
+	
 	//Create a user's pantry from a JSON string
 	public static void createPantry(String user, String jsonPantry){
 		//Get pantries collection

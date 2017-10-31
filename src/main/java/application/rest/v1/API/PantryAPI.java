@@ -103,6 +103,25 @@ public class PantryAPI {
 		
 	}
 	
+	//Get the list of ingredients in the user's pantry
+	@GET
+	@Path("/{access_token}/ingredients")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getIngredients(@PathParam("access_token") final String accessToken) {
+		String resp = "";
+		Respond errorResp = new Respond();
+		//Get the ingredients
+		try {
+			resp = PantryDatabase.getPantryIngredientNames(accessToken);
+		}catch (PantryException e) {
+			errorResp.setToFailure(e.getMessage());
+			errorResp.setCode(204); //Indicate no pantry content
+			resp = errorResp.toString();
+		}
+		
+		return Response.ok(resp).build();
+	}
+	
 	//Delete a user's pantry
 	@DELETE
 	@Path("/{access_token}")

@@ -46,7 +46,7 @@ public class Ingredient{
 		fieldTypes.add("\"number\"");
 		fieldTypes.add("\"text\"");
 		fieldTypes.add("\"date\"");
-		fieldTypes.add("{\"dropdown\": \"text\"}");
+		fieldTypes.add("\"text\"");
 		return fieldTypes.toString();
 	}
 

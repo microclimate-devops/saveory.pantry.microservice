@@ -60,6 +60,13 @@ public class PantryAPI {
 	} 
 
 	@GET
+	@Path("/spec/ingredient/id")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getIngredientIdFieldName(){
+		return Response.ok(Ingredient.exposeIdFieldName()).build();	
+	} 
+	
+	@GET
 	@Path("/spec/ingredient/types")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getIngredientFieldTypes(){

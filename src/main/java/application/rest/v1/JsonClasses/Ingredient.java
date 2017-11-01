@@ -28,6 +28,10 @@ public class Ingredient{
 		this.expiration = expiration;
 		this.location = location;
 	}
+	
+	public static String exposeIdFieldName() {
+		return "{\"id\":\"ingredient\"}";
+	}
 
 	//Give a list of ingredient fields in the order they should appear
 	public static String exposeFields(){

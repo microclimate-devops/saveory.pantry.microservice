@@ -1,7 +1,13 @@
 package application.rest.v1.UnitConversion;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+
+import com.ibm.json.java.JSON;
+import com.ibm.json.java.JSONObject;
+
 import application.rest.v1.CustomExceptions.*;
 
 public class Units {
@@ -22,8 +28,8 @@ public class Units {
 //		return toFlOz;
 //	}
 	
-	public static ArrayList<String> getUnits(){
-		return (ArrayList<String>) toFlOz.keySet();
+	public static Set<String> getUnits() throws IOException{
+		return toFlOz.keySet();
 	}
 	
 	public static Double convert(String unit1, String unit2, Double value) throws UnexpectedUnitException{

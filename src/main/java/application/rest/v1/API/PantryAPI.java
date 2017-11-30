@@ -212,7 +212,7 @@ public class PantryAPI {
 			//Add ingredient to user's pantry in the database
 			failedIngredients = PantryDatabase.autoUpdateIngredient(accessToken, updatedIngredList);
 			
-			jsonResponse = new BasicDBObject("failedIngredients", failedIngredients.toArray());
+			jsonResponse = new BasicDBObject("failedIngredients", failedIngredients);
 			
 		}
 		

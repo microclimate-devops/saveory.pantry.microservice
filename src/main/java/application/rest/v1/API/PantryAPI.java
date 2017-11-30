@@ -46,6 +46,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.HttpResponse;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+
+import com.mongodb.DBObject;
+import com.mongodb.BasicDBObject;
 /**************************/
 
 @Path("pantry")
@@ -160,6 +163,54 @@ public class PantryAPI {
 		return Response.ok(respond.toString()).build();
 	}
 	
+	//Auto update ingredients in user's pantry when using a recipe
+	@PUT
+	@Path("/{access_token}/ingredients/auto")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response autoUpdateIngredients(@PathParam("access_token") final String accessToken, List<Ingredient> updatedIngredList){
+		Respond respond = new Respond();
+		BasicDBObject jsonResponse = new BasicDBObject();
+		ArrayList<Ingredient> failedIngredients = new ArrayList<>();
+		try{
+			//Add ingredient to user's pantry in the database
+			failedIngredients = PantryDatabase.autoUpdateIngredient(accessToken, updatedIngredList);
+			
+			jsonResponse = new BasicDBObject("failedIngredients", failedIngredients.toArray());
+			
+		}
+		
+		catch(PantryException e){
+			respond.setToFailure(e.getMessage());
+			return Response.ok(respond.toString()).build();
+		}
+		if(failedIngredients.isEmpty()){
+			respond.setToSuccess("All ingredients were updated successfully automatically");
+			Response.ok(respond.toString());
+		}
+		return Response.ok(failedIngredients.toString()).build();
+	}
+	
+	//Manual update ingredients in user's pantry when using a recipe
+	@PUT
+	@Path("/{access_token}/ingredients/manual")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response manualUpdateIngredients(@PathParam("access_token") final String accessToken, List<Ingredient> updatedIngredList){
+		Respond respond = new Respond();
+		try{
+			//Add ingredient to user's pantry in the database
+			PantryDatabase.manualUpdateIngredient(accessToken, updatedIngredList);
+			
+			respond.setToSuccess("All ingredients were updated successfully");
+		}
+		
+		catch(PantryException e){
+			respond.setToFailure(e.getMessage());
+		}
+
+		return Response.ok(respond.toString()).build();
+	}
 	
 	//Delete ingredient in user's pantry
 	@DELETE

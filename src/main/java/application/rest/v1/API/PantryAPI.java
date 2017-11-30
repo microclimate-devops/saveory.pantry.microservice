@@ -63,6 +63,13 @@ public class PantryAPI {
 	} 
 
 	@GET
+	@Path("/spec/ingredient/id")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getIngredientIdFieldName(){
+		return Response.ok(Ingredient.exposeIdFieldName()).build();	
+	} 
+	
+	@GET
 	@Path("/spec/ingredient/types")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getIngredientFieldTypes(){
@@ -104,6 +111,25 @@ public class PantryAPI {
 
 		return Response.ok(resp).build();
 		
+	}
+	
+	//Get the list of ingredients in the user's pantry
+	@GET
+	@Path("/{access_token}/ingredients")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getIngredients(@PathParam("access_token") final String accessToken) {
+		String resp = "";
+		Respond errorResp = new Respond();
+		//Get the ingredients
+		try {
+			resp = PantryDatabase.getPantryIngredientNames(accessToken);
+		}catch (PantryException e) {
+			errorResp.setToFailure(e.getMessage());
+			errorResp.setCode(204); //Indicate no pantry content
+			resp = errorResp.toString();
+		}
+		
+		return Response.ok(resp).build();
 	}
 	
 	//Delete a user's pantry

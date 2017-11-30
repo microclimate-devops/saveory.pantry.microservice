@@ -2,6 +2,8 @@ package application.rest.v1.UnitConversion;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+
 import application.rest.v1.CustomExceptions.*;
 
 public class Units {
@@ -22,8 +24,8 @@ public class Units {
 //		return toFlOz;
 //	}
 	
-	public static ArrayList<String> getUnits(){
-		return (ArrayList<String>) toFlOz.keySet();
+	public static String getUnits(){
+		return toFlOz.keySet().toArray().toString();
 	}
 	
 	public static Double convert(String unit1, String unit2, Double value) throws UnexpectedUnitException{

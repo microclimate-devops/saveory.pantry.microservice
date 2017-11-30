@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Ingredient{
 	private String ingredient;
-	private int quantity;
+	private double quantity;
 	private String unit;
 	private String expiration;
 	private String location;
@@ -21,7 +21,7 @@ public class Ingredient{
 		this.location = "";
 	}
 
-	public Ingredient(String ingredient, int quantity, String unit, String expiration, String location){
+	public Ingredient(String ingredient, double quantity, String unit, String expiration, String location){
 		this.ingredient = ingredient;
 		this.quantity = quantity;
 		this.unit = unit;
@@ -85,11 +85,11 @@ public class Ingredient{
 		this.ingredient = ingredient;
 	}
 
-	public int getQuantity(){
+	public double getQuantity(){
 		return this.quantity;
 	}
 
-	public void setQuantity(int quantity){
+	public void setQuantity(double quantity){
 		this.quantity = quantity;
 	}
 
@@ -116,7 +116,10 @@ public class Ingredient{
 	public void setLocation(String location){
 		this.location = location;
 	}
-
+	
+	public Double substractQuantity(Ingredient other){
+		return (double) this.getQuantity() - other.getQuantity();
+	}
 /*
 	@Override
 	public String toString(){

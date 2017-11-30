@@ -4,12 +4,13 @@ package application.rest.v1.DataAccess;
 //Custom Exceptions
 import application.rest.v1.CustomExceptions.PantryException;
 /**************************/
-
+import application.rest.v1.CustomExceptions.UnexpectedUnitException;
 /**************************/
 //JSON classes
 import application.rest.v1.JsonClasses.Ingredient;
 import application.rest.v1.JsonClasses.Pantry;
 /**************************/
+import application.rest.v1.UnitConversion.Units;
 
 /**************************/
 //External Libs
@@ -210,6 +211,66 @@ public class PantryDatabase {
 		}	
 
 
+	}
+	
+	public static ArrayList<Ingredient> autoUpdateIngredient(String user, List<Ingredient> updatedIngredientList) throws PantryException{
+		//Get the user's pantry
+		Pantry userPantry = PantryDatabase.getPantryObject(user);
+		if(userPantry == null){
+			throw new PantryException("The user's pantry could not be found in the database");
+		}
+		
+		String pantryUnit;
+		String recipeUnit;
+		Double conversion;
+		Ingredient pantryIngredient;
+		ArrayList<Ingredient> failedIngredients = new ArrayList<>();
+		
+		for(Ingredient currentIngredient : updatedIngredientList){
+			//Get the units for both the recipe and the pantry ingredient
+			pantryIngredient = userPantry.getIngredient(currentIngredient.getIngredient());
+			pantryUnit = pantryIngredient.getUnit();
+			recipeUnit = currentIngredient.getUnit();
+			
+			try{
+				conversion = Units.convert(pantryUnit, recipeUnit, (double) currentIngredient.getQuantity());
+				pantryIngredient.setQuantity(pantryIngredient.getQuantity() - conversion);
+				updateIngredient(user, pantryIngredient);
+			}
+			
+			catch(UnexpectedUnitException e){
+				failedIngredients.add(currentIngredient);
+			}
+			
+				
+		}
+		
+		return failedIngredients;
+	}
+//		//remove the old ingredient
+//		userPantry.deleteIngredient(updatedIngred.objectIdentifier());
+//
+//		//add the new ingredient
+//		userPantry.addIngredient(updatedIngred);
+//
+//		//update pantry
+//		replacePantry(userPantry);
+
+		//make sure ingredient was updated
+//		if(!updatedIngredientList.equals(PantryDatabase.getPantryObject(user).getIngredient(updatedIngred.objectIdentifier()))){
+//			throw new PantryException("The ingredient update did not take to the database");
+//		}	
+
+	public static void manualUpdateIngredient(String user, List<Ingredient> updatedIngredientList) throws PantryException{
+		//Get the user's pantry
+		Pantry userPantry = PantryDatabase.getPantryObject(user);
+		if(userPantry == null){
+			throw new PantryException("The user's pantry could not be found in the database");
+		}
+		
+		for(Ingredient current : updatedIngredientList)
+			updateIngredient(user, current);
+				
 	}
 
 	public static void removeIngredient(String user, String ingredID) throws PantryException{

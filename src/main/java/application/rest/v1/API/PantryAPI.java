@@ -25,6 +25,8 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
+
+import java.io.IOException;
 import java.io.StringReader;
 import javax.ws.rs.GET;
 import javax.ws.rs.DELETE;
@@ -96,7 +98,7 @@ public class PantryAPI {
 	@GET
 	@Path("/spec/ingredient/units")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getIngredientUnitsSpec(){
+	public Response getIngredientUnitsSpec() throws IOException{
 		return Response.ok(Units.getUnits()).build();	
 	} 
 

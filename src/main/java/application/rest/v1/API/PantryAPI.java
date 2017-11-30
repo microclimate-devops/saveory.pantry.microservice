@@ -5,7 +5,7 @@ package application.rest.v1.API;
 import application.rest.v1.JsonClasses.Ingredient;
 import application.rest.v1.JsonClasses.Pantry;
 /**************************/
-
+import application.rest.v1.UnitConversion.Units;
 /**************************/
 //Data Access
 import application.rest.v1.DataAccess.PantryDatabase;
@@ -90,6 +90,14 @@ public class PantryAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getIngredientFieldSpec(){
 		return Response.ok(Ingredient.exposeLocationOptions()).build();	
+	} 
+	
+	//Get the list of units available for the ingredients
+	@GET
+	@Path("/spec/ingredient/units")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getIngredientUnitsSpec(){
+		return Response.ok(Units.getUnits()).build();	
 	} 
 
 	//Get the pantry of the user

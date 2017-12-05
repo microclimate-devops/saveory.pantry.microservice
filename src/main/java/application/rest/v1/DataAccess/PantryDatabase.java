@@ -287,13 +287,21 @@ public class PantryDatabase {
 
 	public static void manualUpdateIngredient(String user, List<Ingredient> updatedIngredientList) throws PantryException{
 		//Get the user's pantry
+		Ingredient pantryIngredient;
 		Pantry userPantry = PantryDatabase.getPantryObject(user);
 		if(userPantry == null){
 			throw new PantryException("The user's pantry could not be found in the database");
 		}
 		
-		for(Ingredient current : updatedIngredientList)
-			updateIngredient(user, current);
+		for(Ingredient current : updatedIngredientList){
+			if(current.getQuantity() == 0)
+				removeIngredient(user, current.getIngredient());
+			else{ 
+				pantryIngredient = userPantry.getIngredient(current.getIngredient());
+				pantryIngredient.setQuantity(current.getQuantity());
+				updateIngredient(user, pantryIngredient);
+			}
+		}
 				
 	}
 

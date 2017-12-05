@@ -255,15 +255,17 @@ public class PantryDatabase {
 				//Double.pantryIngredient.getQuantity();
 			
 				
-//				if(pantryIngredient.getQuantity() < 0)
+				if(pantryIngredient.getQuantity() < 0){
 //					removeIngredient(user, currentIngredient.getIngredient());
-//					pantryIngredient.setQuantity(0);
+					pantryIngredient.setQuantity(0);
+				}
 				
 				updateIngredient(user, pantryIngredient);
 			}
 			
 			catch(UnexpectedUnitException e){
-				failedIngredients.add(currentIngredient);
+				
+				failedIngredients.add(pantryIngredient);
 			}
 			
 				

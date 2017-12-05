@@ -13,10 +13,10 @@ import application.rest.v1.CustomExceptions.*;
 public class Units {
 	private static HashMap<String, Double> toFlOz = new HashMap<String, Double>(){
 		{
-			put("drop", (double) (1/576));
-			put("pinch", (double) (1/128));
-			put("tsp", (double) (1/6));
-			put("tbsp", (double) (1/2));
+			put("drop", (double)1/(double)576);
+			put("pinch", (double)1/(double)128);
+			put("tsp", (double)1/(double)6);
+			put("tbsp", (double)1/(double)2);
 			put("cup", (double) (8));
 			put("pint", (double) (16));
 			put("quart", (double) (32));
@@ -39,8 +39,8 @@ public class Units {
 		if(toFlOz.get(unit2) == null)
 			throw new UnexpectedUnitException(unit2 + " was not found in our unit conversion table.");
 		
-		double conversion = (double) value * toFlOz.get(unit1);
-		conversion = ((double)conversion / (double)toFlOz.get(unit2));
+		double conversion = value * toFlOz.get(unit1);
+		conversion = conversion / toFlOz.get(unit2);
 		return conversion;
 		
 		

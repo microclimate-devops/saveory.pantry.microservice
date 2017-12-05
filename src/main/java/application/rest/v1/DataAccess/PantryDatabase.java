@@ -246,11 +246,12 @@ public class PantryDatabase {
 			recipeUnit = currentIngredient.getUnit();
 			
 			try{
-				conversion = Units.convert(pantryUnit, recipeUnit, (double) currentIngredient.getQuantity());
+				conversion = Units.convert(recipeUnit, pantryUnit, (double) currentIngredient.getQuantity());
 				pantryIngredient.setQuantity(pantryIngredient.getQuantity() - conversion);
 				
-				if(pantryIngredient.getQuantity() < 0)
-					pantryIngredient.setQuantity(0);
+//				if(pantryIngredient.getQuantity() < 0)
+//					removeIngredient(user, currentIngredient.getIngredient());
+//					pantryIngredient.setQuantity(0);
 				
 				updateIngredient(user, pantryIngredient);
 			}

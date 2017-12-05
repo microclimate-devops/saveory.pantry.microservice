@@ -118,7 +118,7 @@ public class Ingredient{
 	}
 	
 	public Double substractQuantity(Ingredient other){
-		return (double) this.getQuantity() - other.getQuantity();
+		return this.getQuantity() - other.getQuantity();
 	}
 /*
 	@Override

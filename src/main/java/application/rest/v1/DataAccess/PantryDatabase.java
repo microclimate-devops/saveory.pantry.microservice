@@ -204,10 +204,23 @@ public class PantryDatabase {
 
 		//update pantry
 		replacePantry(userPantry);
-
+		
 		//make sure ingredient was updated
-		if(!updatedIngred.equals(PantryDatabase.getPantryObject(user).getIngredient(updatedIngred.objectIdentifier()))){
-			throw new PantryException("The ingredient update did not take to the database");
+		Ingredient pantryIngredient = PantryDatabase.getPantryObject(user).getIngredient(updatedIngred.objectIdentifier());
+		if(!updatedIngred.equals(pantryIngredient)){
+			throw new PantryException("The ingredient update did not take to the database "
+					+ "Pantry Ingredient"
+					+ "Name: " + pantryIngredient.getIngredient() 
+					+ "Quantity: " + pantryIngredient.getQuantity()
+					+ "Unit: " + pantryIngredient.getUnit()
+					+ "Location: " + pantryIngredient.getLocation()
+					+ "Expiration: " + pantryIngredient.getExpiration()
+					+ "Updated Ingredient"
+					+ "Name: " + updatedIngred.getIngredient() 
+					+ "Quantity: " + updatedIngred.getQuantity()
+					+ "Unit: " + updatedIngred.getUnit()
+					+ "Location: " + updatedIngred.getLocation()
+					+ "Expiration: " + updatedIngred.getExpiration());
 		}	
 
 
@@ -235,6 +248,10 @@ public class PantryDatabase {
 			try{
 				conversion = Units.convert(pantryUnit, recipeUnit, (double) currentIngredient.getQuantity());
 				pantryIngredient.setQuantity(pantryIngredient.getQuantity() - conversion);
+				
+				if(pantryIngredient.getQuantity() < 0)
+					pantryIngredient.setQuantity(0);
+				
 				updateIngredient(user, pantryIngredient);
 			}
 			

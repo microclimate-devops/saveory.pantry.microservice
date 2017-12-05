@@ -39,8 +39,8 @@ public class Units {
 		if(toFlOz.get(unit2) == null)
 			throw new UnexpectedUnitException(unit2 + " was not found in our unit conversion table.");
 		
-		Double conversion = (Double) value * toFlOz.get(unit1);
-		conversion = (Double) (conversion / toFlOz.get(unit2));
+		double conversion = (double) value * toFlOz.get(unit1);
+		conversion = (double) (conversion / toFlOz.get(unit2));
 		return conversion;
 		
 		

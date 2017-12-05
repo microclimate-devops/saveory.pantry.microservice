@@ -251,7 +251,8 @@ public class PantryDatabase {
 				else
 					conversion = Units.convert(recipeUnit, pantryUnit, currentIngredient.getQuantity());
 				
-				pantryIngredient.setQuantity(conversion);
+				pantryIngredient.setQuantity(pantryIngredient.getQuantity() - conversion);
+				//Double.pantryIngredient.getQuantity();
 			
 				
 //				if(pantryIngredient.getQuantity() < 0)
@@ -392,7 +393,7 @@ public class PantryDatabase {
 
 				//Save the ingredient information
 				String item = pantryJsonArray.getJsonObject(i).getString("item");
-				int qty = pantryJsonArray.getJsonObject(i).getInt("qty");
+				double qty = pantryJsonArray.getJsonObject(i).getInt("qty");
 				String qtyUnit = pantryJsonArray.getJsonObject(i).getString("qtyUnit");
 				String expDate = pantryJsonArray.getJsonObject(i).getString("expDate");
 

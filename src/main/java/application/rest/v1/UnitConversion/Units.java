@@ -38,7 +38,8 @@ public class Units {
 	
 	public static Set<String> getUnits() throws IOException{
 		Set<String> units = toFlOz.keySet();
-		units.addAll(toGram.keySet());
+		for(String current : toGram.keySet())
+			units.add(current);
 		return units;
 	}
 	

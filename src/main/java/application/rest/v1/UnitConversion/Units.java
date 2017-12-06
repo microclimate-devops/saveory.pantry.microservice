@@ -3,6 +3,7 @@ package application.rest.v1.UnitConversion;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.ibm.json.java.JSON;
@@ -37,9 +38,9 @@ public class Units {
 //	}
 	
 	public static Set<String> getUnits() throws IOException{
-		Set<String> units = toFlOz.keySet();
-		for(String current : toGram.keySet())
-			units.add(current);
+		HashSet<String> units = new HashSet<String>();
+		units.addAll(toFlOz.keySet());
+		units.addAll(toGram.keySet());
 		return units;
 	}
 	

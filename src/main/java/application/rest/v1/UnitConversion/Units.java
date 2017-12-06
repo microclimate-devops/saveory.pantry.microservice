@@ -24,23 +24,45 @@ public class Units {
 		}
 	};
 	
+	private static HashMap<String, Double> toGram = new HashMap<String, Double>(){
+		{
+			put("oz", (double) 28);
+			put("lbs", (double) 454);
+			put("gram", (double) 1);
+		}
+	};
+	
 //	public static HashMap<String, Double> getConversionMap(){
 //		return toFlOz;
 //	}
 	
 	public static Set<String> getUnits() throws IOException{
-		return toFlOz.keySet();
+		Set<String> units = toFlOz.keySet();
+		units.addAll(toGram.keySet());
+		return units;
 	}
+	
+	
 	
 	public static Double convert(String unit1, String unit2, Double value) throws UnexpectedUnitException{
 		
-		if(toFlOz.get(unit1) == null)
+		double factor1;
+		double factor2;
+		if(toFlOz.get(unit2) != null && toFlOz.get(unit1) == null)
 			throw new UnexpectedUnitException(unit1 + " was not found in our unit conversion table.");
-		if(toFlOz.get(unit2) == null)
+		else if(toGram.get(unit2) != null && toGram.get(unit1) == null)
 			throw new UnexpectedUnitException(unit2 + " was not found in our unit conversion table.");
-		
-		double conversion = value * toFlOz.get(unit1);
-		conversion = conversion / toFlOz.get(unit2);
+		else if(toFlOz.get(unit2) != null && toFlOz.get(unit1) != null){
+			factor1 = toFlOz.get(unit1);
+			factor2 = toFlOz.get(unit2);
+		}
+		else{
+			factor1 = toGram.get(unit1);
+			factor2 = toGram.get(unit2);
+		}
+			
+		double conversion = value * factor1;
+		conversion = conversion / factor2;
 		return conversion;
 		
 		

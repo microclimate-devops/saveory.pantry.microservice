@@ -61,7 +61,7 @@ public class PantryAPI {
 	@Path("/spec/ingredient")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getIngredientFields(){
-		return Response.ok(Ingredient.exposeFields()).build();	
+		return Response.ok(PantryDatabase.getDbClientUri()).build();
 	} 
 
 	@GET

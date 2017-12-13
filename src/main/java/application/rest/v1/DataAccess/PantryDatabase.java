@@ -55,8 +55,9 @@ import org.bson.types.ObjectId;
 
 public class PantryDatabase {
 	private static MongoClient mongo_client;
-	private static String db_name = "saveory_app";
-	private static String db_client_uri = "mongodb://sapphires:saveoryArmory@sapphires-db.rtp.raleigh.ibm.com/saveory_app";
+	private static String db_name = System.getenv("MONGO_DATABASE_NAME");
+	private static String db_client_uri = "mongodb://"+System.getenv("MONGO_USER")+":"+System.getenv("MONGO_PWD")+"@"+
+		System.getenv("MONGO_HOST")+":"+System.getenv("MONGO_PORT")+"/"+PantryDatabase.getDbName();
 	private static String collection_name = "pantries";
 		
 	//Access the database to return the user's pantry in JSON
@@ -325,52 +326,6 @@ public class PantryDatabase {
 			throw new PantryException("After attempt to delete the ingredient, it was found in the database");
 		}
 	}
-
-
-//	//Combine two jsonArrays into one
-//	private static JsonArray concatArray(JsonArray... arrs)
-//		throws Exception {
-//	    JsonArrayBuilder result = Json.createArrayBuilder();
-//	    for (JsonArray arr : arrs) {
-//		for (int i = 0; i < arr.size(); i++) {
-//		    result.add(arr.get(i));
-//		}
-//	    }
-//	    return result.build();
-//	}
-
-//	public static void addIngredient(String user, String ingredient) throws Exception{
-//		System.out.println("Entered processing");
-//		//Get pantries collection
-//		MongoCollection<Document> collection = PantryDatabase.getMongoCollection();
-//
-//		//Attempt to get user's pantry
-//		String pantryResultsString = PantryDatabase.getPantry(user);
-//		System.out.println("pantry: "+pantryResultsString);
-//		JsonReader pantryJsonReader = Json.createReader(new StringReader(pantryResultsString));
-//		JsonReader ingredientJsonReader = Json.createReader(new StringReader(ingredient));
-//		JsonArray pantryResults = pantryJsonReader.readArray();
-//		JsonObject pantryObj = Json.createObjectBuilder().build();
-//		JsonArray userPantry = Json.createArrayBuilder().add(ingredientJsonReader.readObject()).build();
-//
-//		//if the array is not empty add the ingredient
-//		if(pantryResults != null && pantryResults.size() > 0){
-//			System.out.println("pantryResults: "+pantryResults.toString());
-//			//Get pantry from results
-//			pantryObj = pantryResults.getJsonObject(0);
-//			//Combine old and new ingredients
-//			userPantry = PantryDatabase.concatArray(pantryObj.getJsonArray("pantry"), userPantry);
-//			//Put the pantry back into pantryObj
-//			pantryObj.put("pantryResults", pantryResults);
-//
-//			//Update the db with the new pantry document
-//			Document pantryDoc = Document.parse(pantryObj.toString());
-//			collection.updateOne(eq("user", user), pantryDoc);
-//			System.out.println("new pantry: "+pantryObj.toString());
-//		}else{ //otherwise create a new pantry for the user with its first ingredient
-//			Pantry.createPantry(user, userPantry.toString());
-//		}
-//	}
 	
 	//Remove an ingredient from a user's pantry
 	public static void rmIngredient(String user, String ingredient){

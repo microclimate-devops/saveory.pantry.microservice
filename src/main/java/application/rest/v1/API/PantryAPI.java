@@ -96,7 +96,7 @@ public class PantryAPI {
 	
 	//Get the list of units available for the ingredients
 	@GET
-	@Path("/spec/ingredient/units")
+	@Path("/spec/ingredient/unit")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getIngredientUnitsSpec() throws IOException{
 		return Response.ok(Units.getUnits()).build();	

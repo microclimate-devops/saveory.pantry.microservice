@@ -13,7 +13,7 @@ Bluemix Microservice Starter in Java
 
 ### Summary
 
-The Pantry Microservice works with User Pantry management to perform operations as adding, editing or removing an ingredient from an users pantry. Also it will work with auto or manual updating the users pantry when a recipe is selected for cooking. Part of this process includes unit conversions, which are also managed by this Microservice.
+The Pantry Microservice works with user Pantry management to perform operations as adding, editing or removing an ingredient from an users pantry. Also it will work with auto or manual updating the users pantry when a recipe is selected for cooking. Part of this process includes unit conversions, which are also managed by this Microservice. User pantries are stored in a MongoDB and are retrieved by using their access token which is their MongoID.
 
 To deploy this application to Bluemix using a toolchain click the **Create Toolchain** button.
 [![Create Toolchain](https://console.ng.bluemix.net/devops/graphics/create_toolchain_button.png)](https://console.ng.bluemix.net/devops/setup/deploy/)

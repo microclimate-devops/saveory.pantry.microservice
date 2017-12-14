@@ -1,4 +1,4 @@
-## Microservice
+## Pantry Microservice
 Bluemix Microservice Starter in Java
 
 [![](https://img.shields.io/badge/bluemix-powered-blue.svg)](https://bluemix.net)
@@ -13,7 +13,7 @@ Bluemix Microservice Starter in Java
 
 ### Summary
 
-The Bluemix Microservice Starter in Java provides a starting point for creating Java microservice applications running on [WebSphere Liberty](https://developer.ibm.com/wasdev/).
+The Pantry Microservice works with User Pantry management to perform operations as adding, editing or removing an ingredient from an users pantry. Also it will work with auto or manual updating the users pantry when a recipe is selected for cooking. Part of this process includes unit conversions, which are also managed by this Microservice.
 
 To deploy this application to Bluemix using a toolchain click the **Create Toolchain** button.
 [![Create Toolchain](https://console.ng.bluemix.net/devops/graphics/create_toolchain_button.png)](https://console.ng.bluemix.net/devops/setup/deploy/)
@@ -32,6 +32,8 @@ The application is configured to provide JAX-RS REST capabilities, JNDI, JSON pa
 These capabilities are provided through dependencies in the pom.xml file and Liberty features enabled in the server config file found in `src/main/liberty/config/server.xml`.
 
 ### Project contents
+The Pantry microservice API is implemented in the PantryAPI.java class. Backend processes are implemented in the PantryDatabase.java class. Objects mapped from the database are the Ingredient, MongoID and the Pantry. Finally, everything related to unit conversion and equivalences is managed in the Units.java class
+
 The microservice application has a health endpoint which is accessible at `<host>:<port>/Pantry/health`. The context root is set in the `src/main/webapp/WEB-INF/ibm-web-ext.xml` file. The ports are set in the pom.xml file and exposed to the CLI in the cli-config.yml file.
 
 The project contains Bluemix specific files that are used to deploy the application as part of a Bluemix DevOps flow. The `.bluemix` directory contains files used to define the Bluemix toolchain and pipeline for your application. The `manifest.yml` file specifies the name of your application in Bluemix, the timeout value during deployment and which services to bind to.
@@ -45,6 +47,10 @@ To build and run the application:
 1. `mvn install`
 1. `mvn liberty:run-server`
 
+To build and run the application using Bluemix CLI:
+
+1. `bx dev build`
+1. `bx dev run`
 
 To run the application in Docker use the Docker file called `Dockerfile`. If you do not want to install Maven locally you can use `Dockerfile-tools` to build a container with Maven installed.
 
@@ -52,6 +58,8 @@ To run the application in Docker use the Docker file called `Dockerfile`. If you
 
 The application exposes the following endpoints:
 * Health endpoint: `<host>:<port>/<contextRoot>/health`
+
+* ADD LINKS TO ENDPOINTS HERE
 
 The context root is set in the `src/main/webapp/WEB-INF/ibm-web-ext.xml` file. The ports are set in the pom.xml file and exposed to the CLI in the cli-config.yml file.
 

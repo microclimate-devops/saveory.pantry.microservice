@@ -172,11 +172,14 @@ public class PantryAPI {
 			//Add ingredient to user's pantry in the database
 			PantryDatabase.addIngredient(accessToken, newIngred);
 			respond.setToSuccess("Added ingredient");
-
-		}catch(PantryException e){
+		}
+		
+		//Any exception while adding the ingredient in the pantry is catched here
+		catch(PantryException e){
 			respond.setToFailure(e.getMessage());	
 		}
-
+		
+		//Response is returned
 		return Response.ok(respond.toString()).build();
 	}
 
@@ -188,14 +191,19 @@ public class PantryAPI {
 	public Response updateIngredient(@PathParam("access_token") final String accessToken, @PathParam("ingredient_id") final String ingredID, Ingredient updatedIngred){
 		Respond respond = new Respond();
 		try{
-			//Add ingredient to user's pantry in the database
+			//Update ingredient to user's pantry in the database
 			PantryDatabase.updateIngredient(accessToken, updatedIngred);
 			respond.setToSuccess("Updated ingredient");
-
-		}catch(PantryException e){
+			
+		
+		}
+		
+		//Any exception while updating the ingredient in the pantry is catched here
+		catch(PantryException e){
 			respond.setToFailure(e.getMessage());	
 		}
-
+		
+		//Response is returned
 		return Response.ok(respond.toString()).build();
 	}
 	
@@ -209,21 +217,26 @@ public class PantryAPI {
 		BasicDBObject jsonResponse = new BasicDBObject();
 		ArrayList<Ingredient> failedIngredients = new ArrayList<>();
 		try{
-			//Add ingredient to user's pantry in the database
+			//This holds the list of ingredients that failed to autoupdate
 			failedIngredients = PantryDatabase.autoUpdateIngredient(accessToken, updatedIngredList);
 			
+			//The list of failed ingredients is converted into a basic db object
 			jsonResponse = new BasicDBObject("failed", failedIngredients);
-			
 		}
 		
+		//Any exception while updating the pantry is catched here
 		catch(PantryException e){
 			respond.setToFailure(e.getMessage());
 			return Response.ok(respond.toString()).build();
 		}
+		
+		//If there were no failed ingredient updates we respond with a ok response
 		if(failedIngredients.isEmpty()){
 			respond.setToSuccess("All ingredients were updated successfully automatically");
 			Response.ok(respond.toString());
 		}
+		
+		//Otherwise we return a Json with the failed ingredient list
 		return Response.ok(jsonResponse).build();
 	}
 	
@@ -235,16 +248,19 @@ public class PantryAPI {
 	public Response manualUpdateIngredients(@PathParam("access_token") final String accessToken, List<Ingredient> updatedIngredList){
 		Respond respond = new Respond();
 		try{
-			//Add ingredient to user's pantry in the database
+			//Failed ingredient list is passed into this method for manual update
 			PantryDatabase.manualUpdateIngredient(accessToken, updatedIngredList);
 			
+			//A successful message is added to the response if no exceptions occur
 			respond.setToSuccess("All ingredients were updated successfully");
 		}
 		
+		//Any exception while updating the pantry is catched
 		catch(PantryException e){
 			respond.setToFailure(e.getMessage());
 		}
-
+		
+		//Response is returned
 		return Response.ok(respond.toString()).build();
 	}
 	
@@ -256,14 +272,16 @@ public class PantryAPI {
 	public Response deleteIngredient(@PathParam("access_token") final String accessToken, @PathParam("ingredient_id") final String ingredID) {
 		Respond respond = new Respond();
 		try{
-			//Add ingredient to user's pantry in the database
+			//Delete ingredient to user's pantry in the database
 			PantryDatabase.removeIngredient(accessToken, ingredID);
 			respond.setToSuccess("Deleted ingredient");
-
+		
+		//Exception during the deletion process are catched here
 		}catch(PantryException e){
 			respond.setToFailure(e.getMessage());	
 		}
-
+		
+		//Response is returned
 		return Response.ok(respond.toString()).build();
 	}
 

@@ -197,16 +197,16 @@ public class PantryDatabase {
 			throw new PantryException("The user's pantry could not be found in the database");
 		}
 
-		//remove the old ingredient
+		//Remove the old ingredient
 		userPantry.deleteIngredient(updatedIngred.objectIdentifier());
 
-		//add the new ingredient
+		//Add the new ingredient
 		userPantry.addIngredient(updatedIngred);
 
-		//update pantry
+		//Update pantry
 		replacePantry(userPantry);
 		
-		//make sure ingredient was updated
+		//Make sure ingredient was updated
 		Ingredient pantryIngredient = PantryDatabase.getPantryObject(user).getIngredient(updatedIngred.objectIdentifier());
 		if(!updatedIngred.equals(pantryIngredient)){
 			throw new PantryException("The ingredient update did not take to the database "
@@ -234,44 +234,52 @@ public class PantryDatabase {
 			throw new PantryException("The user's pantry could not be found in the database");
 		}
 		
+		//Define variables that repeatedly change through every iteration
 		String pantryUnit;
 		String recipeUnit;
 		Double conversion;
 		Ingredient pantryIngredient;
+		
+		//List for the ingredients that were not automatically updated
 		ArrayList<Ingredient> failedIngredients = new ArrayList<>();
 		
+		//Iteration through the ingredients requested to update
 		for(Ingredient currentIngredient : updatedIngredientList){
 			//Get the units for both the recipe and the pantry ingredient
 			pantryIngredient = userPantry.getIngredient(currentIngredient.getIngredient());
 			pantryUnit = pantryIngredient.getUnit();
 			recipeUnit = currentIngredient.getUnit();
 			
+			//Attempt to substract the quantity of the ingredient to update
 			try{
+				//If the units are the same we could just substract the quantity
 				if(pantryUnit.equals(recipeUnit))
 					conversion = currentIngredient.getQuantity();
+				
+				//Conversion is required if the units are not the same
 				else
 					conversion = Units.convert(recipeUnit, pantryUnit, currentIngredient.getQuantity());
 				
+				//After obtaining the conversion value we substract it from the pantry quantity of the ingredient
 				pantryIngredient.setQuantity(pantryIngredient.getQuantity() - conversion);
 				//Double.pantryIngredient.getQuantity();
 			
-				
+				//If the ingredient quantity becomes less than 0 the value will be changed to 0
 				if(pantryIngredient.getQuantity() < 0){
-//					removeIngredient(user, currentIngredient.getIngredient());
+					//removeIngredient(user, currentIngredient.getIngredient()); Needs notification implementation in the front end
 					pantryIngredient.setQuantity(0);
 				}
-				
+				//Ingredient is officially updated with the update pantry method
 				updateIngredient(user, pantryIngredient);
 			}
 			
+			//Catches all failing conversions due to crossing from volume to weight
 			catch(UnexpectedUnitException e){
-				
+				//These failed ingredients are added into a list
 				failedIngredients.add(pantryIngredient);
 			}
-			
-				
 		}
-		
+		//The failed ingredients list is returned
 		return failedIngredients;
 	}
 //		//remove the old ingredient

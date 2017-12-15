@@ -16,7 +16,7 @@ IBM Cloud Microservices Starter for Java - MicroProfile / Java EE
 
 ### Summary
 
-The Pantry Microservice works with user Pantry management to perform operations as adding, editing or removing an ingredient from an users pantry. Also it will work with auto or manual updating the users pantry when a recipe is selected for cooking. Part of this process includes unit conversions, which are also managed by this Microservice. User pantries are stored in a MongoDB and are retrieved by using their access token which is their MongoID.
+The Pantry Microservice provides operations such as adding, editing or removing ingredients from user pantries. Additionally, when the user makes a recipe, they can specify ingredient usage. Endpoints exist to automatically and manually update a pantry based on usage; the manual process is a backup to the automatic method. Part of this process includes unit conversion. User pantries are stored in a MongoDB database and are retrieved via an access token which is generated in the saveory.users.microservice app.
 
 To deploy this application to Bluemix using a toolchain click the **Create Toolchain** button.
 [![Create Toolchain](https://console.ng.bluemix.net/devops/graphics/create_toolchain_button.png)](https://console.ng.bluemix.net/devops/setup/deploy/)
@@ -35,7 +35,7 @@ The application is configured to provide JAX-RS REST capabilities, JNDI, JSON pa
 These capabilities are provided through dependencies in the pom.xml file and Liberty features enabled in the server config file found in `src/main/liberty/config/server.xml`.
 
 ### Project contents
-The Pantry microservice API is implemented in the PantryAPI.java class. Backend processes are implemented in the PantryDatabase.java class. Objects mapped from the database are the Ingredient, MongoID and the Pantry. Finally, everything related to unit conversion and equivalences is managed in the Units.java class
+The Pantry microservice API is implemented in the PantryAPI.java class. Backend processes are implemented in the PantryDatabase.java class. Objects mapped from the database are defined in the Ingredient, MongoID and the Pantry classes. Finally, everything related to unit conversion is managed in the Units.java class
 
 The microservice application has a health endpoint which is accessible at `<host>:<port>/Pantry/health`. The context root is set in the `src/main/webapp/WEB-INF/ibm-web-ext.xml` file. The ports are set in the pom.xml file and exposed to the CLI in the cli-config.yml file.
 
@@ -74,3 +74,8 @@ This project was generated using:
 * generator-ibm-service-enablement v^0.0.59
 * generator-ibm-cloud-enablement v^0.0.68
 * generator-liberty v5.2.0
+
+#### Licenses
+
+- The LICENSE.IBM_Microservice_Builder applies to the project as a whole and was provided by IBM Microservice Builder
+- The LICENSE applies to original source code located in the `src/main/java/application/rest/v1/` folder

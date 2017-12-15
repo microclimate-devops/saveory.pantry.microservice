@@ -1,5 +1,8 @@
 ## Pantry Microservice
-Bluemix Microservice Starter in Java
+- [Saveory Project Website]()
+
+### Built With
+IBM Cloud Microservices Starter for Java - MicroProfile / Java EE
 
 [![](https://img.shields.io/badge/bluemix-powered-blue.svg)](https://bluemix.net)
 [![Platform](https://img.shields.io/badge/platform-java-lightgrey.svg?style=flat)](https://www.ibm.com/developerworks/learn/java/)
@@ -59,7 +62,7 @@ To run the application in Docker use the Docker file called `Dockerfile`. If you
 The application exposes the following endpoints:
 * Health endpoint: `<host>:<port>/<contextRoot>/health`
 
-* ADD LINKS TO ENDPOINTS HERE
+* [API Resource Definition]()
 
 The context root is set in the `src/main/webapp/WEB-INF/ibm-web-ext.xml` file. The ports are set in the pom.xml file and exposed to the CLI in the cli-config.yml file.
 
